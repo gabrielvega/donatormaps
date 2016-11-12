@@ -1,4 +1,28 @@
 var socket = io();
+var donators = [{firstName: "Gabriel",
+                lastName: "Vega",
+                address: "Caracas",
+                contactNumber: "+584142769178",
+                email: "gaveho@gmail.com",
+                bloodGroup: "A+",
+                longitude: -67.044461,
+                latitude: 10.609385
+                },
+                {
+                firstName: "Karitza",
+              lastName: "Pulgar",
+              address: "Orlando",
+              contactNumber: "+12731232312",
+              email: "claraepulv81@gmail.com",
+              bloodGroup: "O+",
+              longitude:-67.011161,
+              latitude: 10.602385
+              }
+
+                      ];
+function showSignupForm(){
+    window.alert("Bienvenido al formulario de registro");
+}
 
 function newDonator(){
 

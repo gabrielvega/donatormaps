@@ -1,23 +1,60 @@
 //http://www.freeiconspng.com/free-images/maps-icon-8221
 
-var map;
-      var graphic;
-      var currLocation;
-      var watchId;
-      var ZOOM = 16;
+    var map;
+    var graphic;
+    var currLocation;
+    var watchId;
+    var ZOOM = 14;
+
       require([
-        "esri/map", "esri/geometry/Point", 
+        "dojo/dom",
+        "dojo/dom-construct",
+        "esri/map", "esri/geometry/Point",
         "esri/symbols/PictureMarkerSymbol",
-        "esri/graphic", "esri/Color", "dojo/domReady!"
+        "esri/graphic", "esri/Color",
+        "esri/InfoTemplate",
+        "esri/layers/FeatureLayer",
+        "dojo/string",
+        "esri/dijit/PopupTemplate",
+        "esri/request",
+        "dojo/on",
+        "dojo/_base/array",
+        "dojo/domReady!"
       ], function(
+        dom,
+        domConstruct,
         Map, Point,
         PictureMarkerSymbol,
-        Graphic, Color
+        Graphic, Color,
+        InfoTemplate,
+        FeatureLayer,
+        string,
+        PopupTemplate,
+        esriRequest,
+        on,
+        array
       ) {
+      var symbolMe =  new PictureMarkerSymbol({
+            "url":"/img/meArrow.png",
+            "height":35,
+            "width":25,
+            "type":"esriPMS",
+            "angle": 0
+          });
+          var symbolDonator =  new PictureMarkerSymbol({
+            "url":"/img/donatorArrow.png",
+            "height":35,
+            "width":25,
+            "type":"esriPMS",
+            "angle": 0
+          });
+
+var featureLayer;
         map = new Map("map", {
           basemap: "topo",
           zoom: ZOOM
         });
+
         map.on("load", initFunc);
 
         function orientationChanged() {
@@ -62,7 +99,7 @@ var map;
 
         function zoomToLocation(location) {
           var pt = new Point(location.coords.longitude, location.coords.latitude);
-          addGraphic(pt,'me');
+          addGraphic(pt);
           map.centerAndZoom(pt, ZOOM);
         }
 
@@ -70,27 +107,114 @@ var map;
           //zoom to the users location and add a graphic
           var pt = new Point(location.coords.longitude, location.coords.latitude);
           if ( !graphic ) {
-            addGraphic(pt,'me');
+          addGraphic(pt);
+
           } else { // move the graphic if it already exists
             graphic.setGeometry(pt);
           }
           map.centerAt(pt);
 
-          for(i=1;i<10;i++){
-            addGraphic(new Point(location.coords.longitude+(10*i/10000), location.coords.latitude),'donator');
-            addGraphic(new Point(location.coords.longitude, location.coords.latitude-(10*i/10000)),'donator');
-          }
         }
-        
-        function addGraphic(pt,me){
-          var symbol =  new PictureMarkerSymbol({
-              "url":"/img/"+me+"Arrow.png",
-              "height":35,
-              "width":25,
-              "type":"esriPMS",
-              "angle": 0
-            });
-          graphic = new Graphic(pt, symbol);
+//hide the popup if its outside the map's extent
+        map.on("mouse-drag", function(evt) {
+          if (map.infoWindow.isShowing) {
+            var loc = map.infoWindow.getSelectedFeature().geometry;
+            if (!map.extent.contains(loc)) {
+              map.infoWindow.hide();
+            }
+          }
+        });
+        map.on("click", function (evt) {
+            if(evt.graphic)
+                if(evt.graphic.attributes.name == "me")
+                    showSignupForm();
+        });
+        var featureCollection = {
+                  "layerDefinition": null,
+                  "featureSet": {
+                    "features": [],
+                    "geometryType": "esriGeometryPoint"
+                  }
+                };
+                featureCollection.layerDefinition = {
+                  "geometryType": "esriGeometryPoint",
+                  "objectIdField": "ObjectID",
+                  "drawingInfo": {
+                    "renderer": {
+                      "type": "simple",
+                      "symbol": symbolDonator
+                    }
+                  },
+                  "fields": [{
+                    "name": "ObjectID",
+                    "alias": "ObjectID",
+                    "type": "esriFieldTypeOID"
+                  }, {
+                    "name": "description",
+                    "alias": "Description",
+                    "type": "esriFieldTypeString"
+                  }, {
+                    "name": "title",
+                    "alias": "Title",
+                    "type": "esriFieldTypeString"
+                  }]
+                };
+
+                //define a popup template
+                        var popupTemplate = new PopupTemplate({
+                          title: "{title}",
+
+                          description: "{description}"
+                        });
+
+                        //create a feature layer based on the feature collection
+                                featureLayer = new FeatureLayer(featureCollection, {
+                                  id: 'donatorsLayer',
+                                  infoTemplate: popupTemplate
+                                });
+
+                                //associate the features with the popup on click
+                                featureLayer.on("click", function(evt) {
+                                  map.infoWindow.setFeatures([evt.graphic]);
+                                });
+
+                                map.on("layers-add-result", function(results) {
+                                  requestPhotos();
+                                });
+                                //add the feature layer that contains the flickr photos to the map
+                                map.addLayers([featureLayer]);
+
+                              function requestPhotos() {
+
+                                var features = [];
+                                array.forEach(donators, function(item) {
+                                  var attr = {};
+                                  attr["description"] = "<strong>Contact number:</strong> " + item.contactNumber +
+                                  "<br><strong>Email address:</strong> " + item.email + "<br><strong>Blood type:</strong> " + item.bloodGroup;
+
+                                  attr["title"] = item.firstName + " " + item.lastName;
+
+                                  var geometry = new Point(item);
+                                  var graphic = new Graphic(geometry);
+                                  graphic.setAttributes(attr);
+                                  features.push(graphic);
+                                });
+
+                                featureLayer.applyEdits(features, null, null);
+                              }
+
+                              function requestFailed(error) {
+                                console.log('failed');
+                              }
+
+
+        function addGraphic(pt){
+          graphic = new Graphic(pt, symbolMe);
+          graphic.setAttributes({
+              id: 0,
+              name: "me"
+          });
           map.graphics.add(graphic);
         }
+
       });
