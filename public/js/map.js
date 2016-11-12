@@ -16,7 +16,6 @@ var map;
       ) {
         map = new Map("map", {
           basemap: "topo",
-          center: [-85.957, 17.140],
           zoom: ZOOM
         });
         map.on("load", initFunc);
@@ -56,14 +55,14 @@ var map;
               break;
 
             default:
-              alert("unknown error");
+              alert("Unknown error");
               break;
           }
         }
 
         function zoomToLocation(location) {
           var pt = new Point(location.coords.longitude, location.coords.latitude);
-          addGraphic(pt);
+          addGraphic(pt,'me');
           map.centerAndZoom(pt, ZOOM);
         }
 
@@ -71,16 +70,21 @@ var map;
           //zoom to the users location and add a graphic
           var pt = new Point(location.coords.longitude, location.coords.latitude);
           if ( !graphic ) {
-            addGraphic(pt);
+            addGraphic(pt,'me');
           } else { // move the graphic if it already exists
             graphic.setGeometry(pt);
           }
           map.centerAt(pt);
+
+          for(i=1;i<10;i++){
+            addGraphic(new Point(location.coords.longitude+(10*i/10000), location.coords.latitude),'donator');
+            addGraphic(new Point(location.coords.longitude, location.coords.latitude-(10*i/10000)),'donator');
+          }
         }
         
-        function addGraphic(pt){
+        function addGraphic(pt,me){
           var symbol =  new PictureMarkerSymbol({
-              "url":"/img/blueArrow.png",
+              "url":"/img/"+me+"Arrow.png",
               "height":35,
               "width":25,
               "type":"esriPMS",
