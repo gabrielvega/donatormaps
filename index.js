@@ -7,12 +7,12 @@ var mongoose = require('mongoose');
 var ObjectId = require('mongodb').ObjectID;
 var Donator = require(__dirname + '/models/Donator'); // get our mongoose model
 var port = process.env.PORT || 3000;
-
+var host = process.env.HOST || "0.0.0.0"
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://admin:admin@jello.modulusmongo.net:27017/nahY8roq");
 
-server.listen(port, function () {
-  console.log('Server listening at port %d', port);
+server.listen(port,host, function () {
+  console.log('Server listening at port %d and host %s', port,host);
 });
 
 // Routing
