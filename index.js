@@ -4,10 +4,12 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var mongoose = require('mongoose');
+var ObjectId = require('mongodb').ObjectID;
 var Donator = require(__dirname + '/models/Donator'); // get our mongoose model
 var port = process.env.PORT || 3000;
 
-//mongoose.connect("mongodb://admin:admin@jello.modulusmongo.net:27017/nahY8roq");
+mongoose.Promise = global.Promise;
+mongoose.connect("mongodb://admin:admin@jello.modulusmongo.net:27017/nahY8roq");
 
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
@@ -23,45 +25,73 @@ var numUsers = 0;
 
 io.on('connection', function (socket) {
   var addedUser = false;
-  console.log('Usuario conectado');
+
 
   socket.on('login', function(data) {
-  var donators = [{firstName: "Gabriel",
-                  lastName: "Vega",
-                  address: "Caracas",
-                  contactNumber: "+584142769178",
-                  email: "gaveho@gmail.com",
-                  bloodGroup: "A+",
-                  longitude: -67.044461,
-                  latitude: 10.609385
-                  },
-                  {
-                  firstName: "Karitza",
-                lastName: "Pulgar",
-                address: "Orlando",
-                contactNumber: "+12731232312",
-                email: "claraepulv81@gmail.com",
-                bloodGroup: "O+",
-                longitude:-67.011161,
-                latitude: 10.602385
-                }
-
-                        ];
-    //TODO Buscar los registros en Mongo
-
+    console.log('Usuario conectado');
     console.log(data);
-    socket.emit('login', donators);
+    Donator.find({ _id: {$ne: ObjectId(data.id)} })
+      .exec(function (err, donatorList) {
+
+        if(err)
+            console.log(err);
+
+        var donators = [];
+        var don;
+
+        donatorList.forEach(function (currentValue, index, arr) {
+
+          don = {
+
+            "_id": currentValue._id,
+            "firstName": currentValue.firstName,
+            "lastName": currentValue.lastName,
+            "address": currentValue.address,
+            "contactNumber": currentValue.contactNumber,
+            "email": currentValue.email,
+            "bloodGroup": currentValue.bloodGroup,
+            "ip": currentValue.ip,
+            "longitude": currentValue.loc.lng,
+            "latitude": currentValue.loc.lat,
+            "created": currentValue.created
+          }
+
+          donators.push(don);
+        });
+        socket.emit('login', donators);
+      });
+
+
   });
 
   // when the client emits 'new message', this listens and executes
   socket.on('donator', function (data) {
-    // we tell the client to execute 'new message'
-    console.log(data);
-    //TODO Guardo en Mongo
-    data.longitude = data.loc.type[0];
-    data.latitude = data.loc.type[1];
-    socket.emit('donator',{url: "url"});
-    socket.broadcast.emit('update',data);
+    //data.loc.index = "2d";
+    var newDonator = new Donator({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        address: data.address,
+        contactNumber: data.contactNumber,
+        email: data.email,
+        bloodGroup: data.bloodGroup,
+        ip: socket.handshake.address,
+        loc: data.loc,
+        created: String(new Date())
+    });
+
+    newDonator.save(function (err,donator) {
+        if (err){
+        console.log(err);
+        throw (err);
+        }
+        console.log("Donator " + data.firstName + " " + data.lastName + " saved successfully");
+        console.log(donator);
+        data.longitude = data.loc.lng;
+        data.latitude = data.loc.lat;
+        socket.emit('donator',{url: donator._id});
+        socket.broadcast.emit('update',data);
+      });//newDonator
+
   });
 
 });

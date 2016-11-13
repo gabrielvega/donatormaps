@@ -21,6 +21,10 @@ var map;
         "esri/request",
         "dojo/on",
         "dojo/_base/array",
+        "esri/tasks/locator",
+        "esri/geometry/webMercatorUtils",
+        "dojo/parser",
+        "dijit/registry",
         "dojo/domReady!"
       ], function(
         dom,
@@ -34,7 +38,11 @@ var map;
         PopupTemplate,
         esriRequest,
         on,
-        array
+        array,
+        Locator,
+        webMercatorUtils,
+        parser,
+        registry
       ) {
       var symbolMe =  new PictureMarkerSymbol({
             "url":"/img/meArrow.png",
@@ -51,9 +59,9 @@ var map;
             "angle": 0
           });
 
-
+        parser.parse();
         map = new Map("map", {
-          basemap: "topo",
+          basemap: "streets",
           zoom: ZOOM
         });
 
@@ -128,10 +136,30 @@ var map;
           }
         });
         map.on("click", function (evt) {
-            if(evt.graphic)
-                if(evt.graphic.attributes.name == "me")
+
+
+            if("graphic" in evt) {
+                if(evt.graphic.attributes.name == "me"){
                     showSignupForm();
+                }
+            }
+            //map.graphics.clear();
+            locator.locationToAddress(webMercatorUtils.webMercatorToGeographic(evt.mapPoint), 100);
+
+
+
+
         });
+        var locator = new Locator("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
+
+        locator.on("location-to-address-complete", function(evt) {
+                  if (evt.address.address) {
+                  console.log(evt.address.address);
+                  address = evt.address.address.Match_addr;
+                  }
+                });
+
+
         var featureCollection = {
                   "layerDefinition": null,
                   "featureSet": {
