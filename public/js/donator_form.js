@@ -50,7 +50,9 @@ var DonatorForm = React.createClass({
   },
   componentDidMount: function(){
     console.log("Hola payaso");
-    var donator = JSON.parse(localStorage.user);
+    var donator;
+    if(localStorage.user)
+        donator = JSON.parse(localStorage.user);
     if(location.hash.length == 25){
             ReactDOM.render(
              <DonatorForm props={donator} donatorId={localStorage.url}  />,
@@ -58,6 +60,7 @@ var DonatorForm = React.createClass({
         );
         document.getElementById("donator-form").style.display = "";
         document.getElementById("edit-donator-form").style.display = "";
+        document.getElementById("delete-donator-form").style.display = "";
         document.getElementById("response-donator-form").style.display = "none";
         }
   },
@@ -90,8 +93,10 @@ var DonatorForm = React.createClass({
         );
     }
 });
+    var donator = {};
+    if(localStorage.user)
+        donator = JSON.parse(localStorage.user);
 
-    var donator = JSON.parse(localStorage.user);
     if(location.hash.length == 25){
             ReactDOM.render(
              <DonatorForm props={donator} donatorId={location.hash.substring(1)}  />,
@@ -99,6 +104,7 @@ var DonatorForm = React.createClass({
         );
         document.getElementById("donator-form").style.display = "";
         document.getElementById("edit-donator-form").style.display = "";
+        document.getElementById("delete-donator-form").style.display = "";
         document.getElementById("response-donator-form").style.display = "none";
         } else {
 

@@ -66,9 +66,16 @@ io.on('connection', function (socket) {
 
   });
 
+  socket.on('donator delete', function (data) {
+
+
+    Donator.findOneAndRemove({_id : ObjectId(data)}, function(erro,data){
+    });
+    //Need to update the others users
+  });
 
   socket.on('donator', function (data) {
-//TODO If donatorId != "" then have to update
+
     console.log(data);
     var donatorId = data.donator_id;
 

@@ -56,6 +56,14 @@ console.log(data);
     socket.emit('donator',donator);
 }
 
+function deleteDonator(){
+    socket.emit('donator delete',localStorage.url);
+    document.getElementById("edit-donator-form").style.display = "none";
+    document.getElementById("delete-donator-form").style.display = "none";
+    delete localStorage.user;
+    delete localStorage.url;
+}
+
 function makeid(lon)
 {
     var text = "";
@@ -108,7 +116,11 @@ socket.on('donator',function(data) {
     document.getElementById("edit-donator-form").href += data.url;
     document.getElementById("response-donator-form").style.display = "";
     document.getElementById("edit-donator-form").style.display = "";
+    document.getElementById("delete-donator-form").style.display = "";
 });
 
-if(localStorage.url.length == 24)
-    document.getElementById("edit-donator-form").style.display = "";
+if(localStorage.url)
+    if(localStorage.url.length == 24){
+        document.getElementById("edit-donator-form").style.display = "";
+        document.getElementById("delete-donator-form").style.display = "";
+    }

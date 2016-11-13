@@ -177,7 +177,11 @@ ul {
 
 }
 
-.edit-donator-form #response-donator-form {
+#response-donator-form {
     width: 510px;
 
+}
+
+#delete-donator-form {
+    top: 70px;
 }
