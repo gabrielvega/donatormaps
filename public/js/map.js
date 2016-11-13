@@ -155,7 +155,7 @@ var map;
         locator.on("location-to-address-complete", function(evt) {
                   if (evt.address.address) {
                   console.log(evt.address.address);
-                  address = evt.address.address.Match_addr;
+                  donatorAddress = evt.address.address.Match_addr;
                   }
                 });
 

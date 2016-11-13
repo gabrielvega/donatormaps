@@ -30,6 +30,8 @@ io.on('connection', function (socket) {
   socket.on('login', function(data) {
     console.log('Usuario conectado');
     console.log(data);
+    if(String(data.id).length != 24)
+        data.id = "000000000000000000000000";
     Donator.find({ _id: {$ne: ObjectId(data.id)} })
       .exec(function (err, donatorList) {
 
@@ -64,9 +66,9 @@ io.on('connection', function (socket) {
 
   });
 
-  // when the client emits 'new message', this listens and executes
+
   socket.on('donator', function (data) {
-    //data.loc.index = "2d";
+//TODO If donatorId != "" then have to update
     var newDonator = new Donator({
         firstName: data.firstName,
         lastName: data.lastName,
@@ -88,7 +90,7 @@ io.on('connection', function (socket) {
         console.log(donator);
         data.longitude = data.loc.lng;
         data.latitude = data.loc.lat;
-        socket.emit('donator',{url: donator._id});
+        socket.emit('donator',{url: donator._id, ip:donator.ip, address: data.address,loc: donator.loc});
         socket.broadcast.emit('update',data);
       });//newDonator
 
