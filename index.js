@@ -4,9 +4,11 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var mongoose = require('mongoose');
+var ObjectId = require('mongodb').ObjectID;
 var Donator = require(__dirname + '/models/Donator'); // get our mongoose model
 var port = process.env.PORT || 3000;
 
+mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://admin:admin@jello.modulusmongo.net:27017/nahY8roq");
 
 server.listen(port, function () {
@@ -24,59 +26,72 @@ var numUsers = 0;
 io.on('connection', function (socket) {
   var addedUser = false;
 
+
+  socket.on('login', function(data) {
+    console.log('Usuario conectado');
+    console.log(data);
+    Donator.find({ _id: {$ne: ObjectId(data.id)} })
+      .exec(function (err, donatorList) {
+
+        if(err)
+            console.log(err);
+
+        var donators = [];
+        var don;
+
+        donatorList.forEach(function (currentValue, index, arr) {
+
+          don = {
+
+            "_id": currentValue._id,
+            "firstName": currentValue.firstName,
+            "lastName": currentValue.lastName,
+            "address": currentValue.address,
+            "contactNumber": currentValue.contactNumber,
+            "email": currentValue.email,
+            "bloodGroup": currentValue.bloodGroup,
+            "ip": currentValue.ip,
+            "longitude": currentValue.loc.lng,
+            "latitude": currentValue.loc.lat,
+            "created": currentValue.created
+          }
+
+          donators.push(don);
+        });
+        socket.emit('login', donators);
+      });
+
+
+  });
+
   // when the client emits 'new message', this listens and executes
   socket.on('donator', function (data) {
-    // we tell the client to execute 'new message'
-    console.log(data);
-
-    //socket.broadcast.emit('new message', {
-      //username: socket.username,
-      //message: data
-    //});
-  });
-
-  // when the client emits 'add user', this listens and executes
-  socket.on('add user', function (username) {
-    if (addedUser) return;
-
-    // we store the username in the socket session for this client
-    socket.username = username;
-    ++numUsers;
-    addedUser = true;
-    socket.emit('login', {
-      numUsers: numUsers
+    //data.loc.index = "2d";
+    var newDonator = new Donator({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        address: data.address,
+        contactNumber: data.contactNumber,
+        email: data.email,
+        bloodGroup: data.bloodGroup,
+        ip: socket.handshake.address,
+        loc: data.loc,
+        created: String(new Date())
     });
-    // echo globally (all clients) that a person has connected
-    socket.broadcast.emit('user joined', {
-      username: socket.username,
-      numUsers: numUsers
-    });
+
+    newDonator.save(function (err,donator) {
+        if (err){
+        console.log(err);
+        throw (err);
+        }
+        console.log("Donator " + data.firstName + " " + data.lastName + " saved successfully");
+        console.log(donator);
+        data.longitude = data.loc.lng;
+        data.latitude = data.loc.lat;
+        socket.emit('donator',{url: donator._id});
+        socket.broadcast.emit('update',data);
+      });//newDonator
+
   });
 
-  // when the client emits 'typing', we broadcast it to others
-  socket.on('typing', function () {
-    socket.broadcast.emit('typing', {
-      username: socket.username
-    });
-  });
-
-  // when the client emits 'stop typing', we broadcast it to others
-  socket.on('stop typing', function () {
-    socket.broadcast.emit('stop typing', {
-      username: socket.username
-    });
-  });
-
-  // when the user disconnects.. perform this
-  socket.on('disconnect', function () {
-    if (addedUser) {
-      --numUsers;
-
-      // echo globally that this client has left
-      socket.broadcast.emit('user left', {
-        username: socket.username,
-        numUsers: numUsers
-      });
-    }
-  });
 });

@@ -14,9 +14,6 @@ module.exports = mongoose.model('Donator', new Schema({
     email: String,
     bloodGroup: String,
     ip: String,
-    loc: {
-      type: [Number],  // [<longitude>, <latitude>]
-      index: '2d'      // geospatial index
-    },
+    loc: Object,
     created: String
 }));
