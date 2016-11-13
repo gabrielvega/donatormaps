@@ -6,7 +6,7 @@
     "npm": "3.8.6"
   },
   "description": "A Crossover test for FSA position using MEAN stack, REACT, socket.io, ArcGIS and MongoDB",
-  "main": "app/index.js",
+  "main": "index.js",
   "author": "Gabriel Vega Hoffmann",
   "private": true,
   "license": "",
@@ -16,7 +16,7 @@
     "socket.io": "^1.5.1"
   },
   "scripts": {
-    "start": "node .",
+    "start": "node index.js",
     "test": ""
   }
 }
