@@ -33,22 +33,22 @@ function showSignupForm(){
     console.log("Bienvenido al formulario de registro");
 }
 
-function newDonator(){
-
+function newDonator(data){
+console.log(data);
     var donator = {
-       firstName: "Gabriel",
-       lastName: "Vega",
+       firstName: data.firstName,
+       lastName: data.lastName,
        address: address,
-       contactNumber: "+584142769178",
-       email: "gaveho@gmail.com",
-       bloodGroup: "A+",
+       contactNumber: data.contactNumber,
+       email: data.email,
+       bloodGroup: data.bloodGroup,
        loc:
          {
            lng: Number(longitude),
            lat: Number(latitude)
          }
        }
-    socket.emit('donator',donator);
+    //socket.emit('donator',donator);
 }
 
 function makeid(lon)
