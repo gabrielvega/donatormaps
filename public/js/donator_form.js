@@ -14,7 +14,7 @@ var DonatorForm = React.createClass({
     },
     handleSubmit: function(e){
         e.preventDefault();
-      console.log(this.state);
+
       this.state.address = donatorAddress;
       newDonator(this.state);
       return;
@@ -49,7 +49,7 @@ var DonatorForm = React.createClass({
     });
   },
   componentDidMount: function(){
-    console.log("Hola payaso");
+
     var donator;
     if(localStorage.user)
         donator = JSON.parse(localStorage.user);

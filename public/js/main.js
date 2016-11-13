@@ -20,8 +20,7 @@ function showPosition(position) {
 
 
 socket.on('login',function(data){
-    console.log('Login');
-    console.log(data);
+
     donators = data;
     drawMap();
 });
@@ -30,13 +29,13 @@ var donators;
 var clicked = 1;
 
 function showSignupForm(){
-    console.log("Bienvenido al formulario de registro");
+
     document.getElementById("donator-form").style.display = "";
     document.getElementById("response-donator-form").style.display = "none";
 }
 
 function newDonator(data){
-console.log(data);
+
     var donator = {
        firstName: data.firstName,
        lastName: data.lastName,
@@ -102,9 +101,9 @@ function nuevoDonator(){
 }
 
 socket.on('donator',function(data) {
-    console.log("on.donator");
+
     localStorage.donatormaps = data.url;
-    console.log(data);
+
     localStorage.url = data.url;
     var html = "<div>Your url to edit is <a href='"+location.origin+"#" +
         data.url + "'>"+location.origin+"/#"+data.url+"</a></div>";
