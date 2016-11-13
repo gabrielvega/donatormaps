@@ -25,7 +25,7 @@
 <body class="claro">
 
 <div id="donator-form" class="donator-form" style="display: none"></div>
-<a id="edit-donator-form" href="#" class="edit-donator-form" style="display: none" onclick="window.location.href = this.href">Edit my profile</a>
+<a id="edit-donator-form" href="#" class="edit-donator-form" style="display: none" onclick="window.location.href = this.href; document.location.reload()">Edit my profile</a>
 <div id="response-donator-form" class="donator-form" style="display: none"></div>
 
 <div id="map"></div>
@@ -44,9 +44,8 @@
 <script src="/js/map.js"></script>
 <script src="/js/main.js"></script>
 <script type="text/babel" src="/js/donator_form.js"></script>
-<script type="text/babel">
-
-
+<script>
+document.getElementById('edit-donator-form').href += localStorage.url;
 </script>
 </body>
 
