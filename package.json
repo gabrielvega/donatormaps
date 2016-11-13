@@ -1,9 +1,13 @@
 {
   "name": "Donator Maps",
   "version": "1.0.0",
-  "description": "A Crossover test for FSA position using MEAN stack, REACT, socket.io, ArcGIS",
+  "engines": {
+    "node": "5.12.0",
+    "npm": "3.8.6"
+  },
+  "description": "A Crossover test for FSA position using MEAN stack, REACT, socket.io, ArcGIS and MongoDB",
   "main": "app/index.js",
-  "author": "Gabriel Vega",
+  "author": "Gabriel Vega Hoffmann",
   "private": true,
   "license": "",
   "dependencies": {
