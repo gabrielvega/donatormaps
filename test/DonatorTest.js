@@ -1,58 +1,86 @@
 var expect = require('chai').expect;
 var sinon = require('sinon');
 
-var Meme = require('../models/donator');
+var Donator = require('../models/donator');
 
 describe('donator', function() {
-	it('should be invalid if name is empty', function(done) {
+	it('should be invalid if first name is empty', function(done) {
 		var m = new Donator();
 
 		m.validate(function(err) {
-			expect(err.errors.name).to.exist;
-			done();
-		});
-	});
-/*
-	it('should have validation error for repost if not dank', function(done) {
-		var m = new Meme({ repost: true });
-
-		m.validate(function(err) {
-			expect(err.errors.repost).to.exist;
+			expect(err.errors.firstName).to.exist;
 			done();
 		});
 	});
 
-	it('should be valid repost when dank', function(done) {
-		var m = new Meme({ repost: true, dank: true });
+	it('should be invalid if last name is empty', function(done) {
+    		var m = new Donator();
 
-		m.validate(function(err) {
-			expect(err.errors.repost).to.not.exist;
-			done();
-		});
-	});
+    		m.validate(function(err) {
+    			expect(err.errors.lastName).to.exist;
+    			done();
+    		});
+    });
 
-	it('should check for reposts with same name', sinon.test(function() {
-		this.stub(Meme, 'findOne');
-		var expectedName = 'This name should be used in the check';
-		var m = new Meme({ name: expectedName });
+    it('should be invalid if address is empty', function(done) {
+        		var m = new Donator();
 
-		m.checkForReposts(function() { });
+        		m.validate(function(err) {
+        			expect(err.errors.address).to.exist;
+        			done();
+        		});
+        });
 
-		sinon.assert.calledWith(Meme.findOne, {
-			name: expectedName,
-			repost: true
+	it('should be invalid if contact number is empty', function(done) {
+    		var m = new Donator();
+
+    		m.validate(function(err) {
+    			expect(err.errors.contactNumber).to.exist;
+    			done();
+    		});
+    });
+
+    it('should be invalid if email is empty', function(done) {
+        		var m = new Donator();
+            m.validate(function(err) {
+                expect(err.errors.email).to.exist;
+                done();
+            });
+    });
+
+    it('should be invalid if loc is empty', function(done) {
+        		var m = new Donator();
+
+        		m.validate(function(err) {
+        			expect(err.errors.loc).to.exist;
+        			done();
+        		});
+    });
+
+
+
+	it('should check for donators with same email', sinon.test(function() {
+		this.stub(Donator, 'findOne');
+		var expectedName = 'This email should be used in the check';
+		var m = new Donator({ email: expectedName });
+
+		m.checkForDuplicateEmails(function() { });
+
+		sinon.assert.calledWith(Donator.findOne, {
+			email: expectedName
 		});
 	}));
 
-	it('should call back with true when repost exists', sinon.test(function(done) {
-		var repostObject = { name: 'foo' };
-		this.stub(Meme, 'findOne').yields(null, repostObject);
-		var m = new Meme({ name: 'some name' });
 
-		m.checkForReposts(function(hasReposts) {
-			expect(hasReposts).to.be.true;
+	it('should call back with true when email exists', sinon.test(function(done) {
+		var repostObject = { email: 'gaveho@gmail.com' };
+		this.stub(Donator, 'findOne').yields(null, repostObject);
+		var m = new Donator({ email: 'otheremail@gmail.com' });
+
+		m.checkForDuplicateEmails(function(emailExists) {
+			expect(emailExists).to.be.true;
 			done();
 		});
 	}));
-	*/
+
 });
