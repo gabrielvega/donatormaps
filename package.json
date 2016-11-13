@@ -1,5 +1,5 @@
 {
-  "name": "Donator Maps",
+  "name": "donator-maps",
   "version": "1.0.0",
   "engines": {
     "node": "5.12.0",
