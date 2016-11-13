@@ -91,7 +91,7 @@ var DonatorForm = React.createClass({
     }
 });
 
-var donator = JSON.parse(localStorage.user);
+    var donator = JSON.parse(localStorage.user);
     if(location.hash.length == 25){
             ReactDOM.render(
              <DonatorForm props={donator} donatorId={location.hash.substring(1)}  />,

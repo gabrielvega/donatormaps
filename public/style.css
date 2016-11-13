@@ -176,3 +176,8 @@ ul {
     border-radius: 5px;
 
 }
+
+.edit-donator-form #response-donator-form {
+    width: 510px;
+
+}
