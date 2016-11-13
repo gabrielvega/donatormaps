@@ -1,10 +1,12 @@
 //http://www.freeiconspng.com/free-images/maps-icon-8221
+var map;
+        var graphic;
+        var currLocation;
+        var watchId;
+        var ZOOM = 14;
+        var featureLayer;
 
-    var map;
-    var graphic;
-    var currLocation;
-    var watchId;
-    var ZOOM = 14;
+    function drawMap(){
 
       require([
         "dojo/dom",
@@ -49,13 +51,14 @@
             "angle": 0
           });
 
-var featureLayer;
+
         map = new Map("map", {
           basemap: "topo",
           zoom: ZOOM
         });
 
         map.on("load", initFunc);
+
 
         function orientationChanged() {
           if(map){
@@ -179,12 +182,20 @@ var featureLayer;
                                 });
 
                                 map.on("layers-add-result", function(results) {
-                                  requestPhotos();
+                                  addDonators();
                                 });
+
+                                socket.on('update',function(data) {
+                                    console.log("Info actualizada " + donators.length);
+                                    console.log(data);
+                                    donators.push(data);
+                                    addDonators();
+                                });
+
                                 //add the feature layer that contains the flickr photos to the map
                                 map.addLayers([featureLayer]);
 
-                              function requestPhotos() {
+                              function addDonators() {
 
                                 var features = [];
                                 array.forEach(donators, function(item) {
@@ -203,10 +214,6 @@ var featureLayer;
                                 featureLayer.applyEdits(features, null, null);
                               }
 
-                              function requestFailed(error) {
-                                console.log('failed');
-                              }
-
 
         function addGraphic(pt){
           graphic = new Graphic(pt, symbolMe);
@@ -218,3 +225,4 @@ var featureLayer;
         }
 
       });
+      }
