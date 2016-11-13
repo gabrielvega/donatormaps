@@ -112,7 +112,6 @@ socket.on('donator',function(data) {
     html += "<div>Location: (" + data.loc.lng +", " + data.loc.lat +") (lng,lat)</div>";
     html +="<button onclick='document.getElementById(\"response-donator-form\").style.display = \"none\"'>Close</button>";
     document.getElementById("response-donator-form").innerHTML = html;
-    document.getElementById("edit-donator-form").href += data.url;
     document.getElementById("response-donator-form").style.display = "";
     document.getElementById("edit-donator-form").style.display = "";
     document.getElementById("delete-donator-form").style.display = "";
