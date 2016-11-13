@@ -1,10 +1,6 @@
 {
   "name": "donator-maps",
   "version": "1.0.0",
-  "engines": {
-    "node": "5.12.0",
-    "npm": "3.8.6"
-  },
   "description": "A Crossover test for FSA position using MEAN stack, REACT, socket.io, ArcGIS and MongoDB",
   "main": "app/index.js",
   "author": "Gabriel Vega Hoffmann",
@@ -14,5 +10,9 @@
     "express": "4.13.4",
     "mongoose": "^4.6.7",
     "socket.io": "^1.5.1"
+  },
+  "scripts": {
+    "start": "node .",
+    "test": "swagger project test"
   }
 }
