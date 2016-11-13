@@ -15,9 +15,21 @@
 </style>
   <title>Donator Maps</title>
   <link rel="stylesheet" href="style.css">
+    <script src="https://fb.me/react-0.14.6.js"></script>
+    <script src="https://fb.me/react-dom-0.14.6.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+
 </head>
 
 <body class="claro">
+
+<div id="donator-form" class="donator-form" style="display: none"></div>
+<a id="edit-donator-form" href="#" class="edit-donator-form" style="display: none " onclick="window.location.href = this.href; document.location.reload()">Edit my profile</a>
+<a id="delete-donator-form" href="#" class="edit-donator-form" style="display: none" onclick="deleteDonator()">Delete my info from Donator Maps :(</a>
+
+<div id="response-donator-form" class="donator-form" style="display: none"></div>
+
 <div id="map"></div>
 
 
@@ -25,15 +37,18 @@
         parseOnLoad: true
       };
     </script>
-<!-- TODO Change for REACT -->
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<!-- Change for REACT -->
+
+
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src="https://js.arcgis.com/3.18compact/"></script>
 
 
 <script src="/js/map.js"></script>
 <script src="/js/main.js"></script>
+<script type="text/babel" src="/js/donator_form.js"></script>
+<script>
+document.getElementById('edit-donator-form').href += localStorage.url;
+</script>
 </body>
 
 </html>

@@ -30,6 +30,8 @@ io.on('connection', function (socket) {
   socket.on('login', function(data) {
     console.log('Usuario conectado');
     console.log(data);
+    if(String(data.id).length != 24)
+        data.id = "000000000000000000000000";
     Donator.find({ _id: {$ne: ObjectId(data.id)} })
       .exec(function (err, donatorList) {
 
@@ -64,33 +66,56 @@ io.on('connection', function (socket) {
 
   });
 
-  // when the client emits 'new message', this listens and executes
-  socket.on('donator', function (data) {
-    //data.loc.index = "2d";
-    var newDonator = new Donator({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        address: data.address,
-        contactNumber: data.contactNumber,
-        email: data.email,
-        bloodGroup: data.bloodGroup,
-        ip: socket.handshake.address,
-        loc: data.loc,
-        created: String(new Date())
-    });
+  socket.on('donator delete', function (data) {
 
-    newDonator.save(function (err,donator) {
-        if (err){
-        console.log(err);
-        throw (err);
-        }
-        console.log("Donator " + data.firstName + " " + data.lastName + " saved successfully");
-        console.log(donator);
-        data.longitude = data.loc.lng;
-        data.latitude = data.loc.lat;
-        socket.emit('donator',{url: donator._id});
-        socket.broadcast.emit('update',data);
-      });//newDonator
+
+    Donator.findOneAndRemove({_id : ObjectId(data)}, function(erro,data){
+    });
+    //Need to update the others users
+  });
+
+  socket.on('donator', function (data) {
+
+    console.log(data);
+    var donatorId = data.donator_id;
+
+    if(donatorId){
+        delete data.donator_id;
+        data.ip = socket.handshake.address;
+        Donator.update({ _id: donatorId }, { $set: data}, function (err, tank) {
+            if (err) return handleError(err);
+            data.longitude = data.loc.lng;
+             data.latitude = data.loc.lat;
+             socket.emit('donator',{url: donatorId, ip:data.ip, address: data.address,loc: data.loc});
+             socket.broadcast.emit('update',data);
+        });
+
+    } else {
+    var newDonator = new Donator({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            address: data.address,
+            contactNumber: data.contactNumber,
+            email: data.email,
+            bloodGroup: data.bloodGroup,
+            ip: socket.handshake.address,
+            loc: data.loc,
+            created: String(new Date())
+        });
+
+     newDonator.save(function (err,donator) {
+         if (err){
+         console.log(err);
+         throw (err);
+         }
+         console.log("Donator " + data.firstName + " " + data.lastName + " saved successfully");
+         console.log(donator);
+         data.longitude = data.loc.lng;
+         data.latitude = data.loc.lat;
+         socket.emit('donator',{url: donator._id, ip:donator.ip, address: data.address,loc: donator.loc});
+         socket.broadcast.emit('update',data);
+       });//newDonator
+    }
 
   });
 

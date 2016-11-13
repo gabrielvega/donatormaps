@@ -1,11 +1,11 @@
 {
-  "name": "socket.io-chat",
-  "version": "0.0.0",
-  "description": "A simple chat client using socket.io",
+  "name": "Donator Maps",
+  "version": "1.0.0",
+  "description": "A Crossover test for FSA position using MEAN stack, REACT, socket.io, ArcGIS",
   "main": "app/index.js",
-  "author": "Grant Timmerman",
+  "author": "Gabriel Vega",
   "private": true,
-  "license": "BSD",
+  "license": "",
   "dependencies": {
     "express": "4.13.4",
     "mongoose": "^4.6.7",

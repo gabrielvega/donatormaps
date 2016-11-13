@@ -1,5 +1,5 @@
 var socket = io();
-var address;
+var donatorAddress;
 var longitude;
 var latitude;
 
@@ -31,24 +31,37 @@ var clicked = 1;
 
 function showSignupForm(){
     console.log("Bienvenido al formulario de registro");
+    document.getElementById("donator-form").style.display = "";
+    document.getElementById("response-donator-form").style.display = "none";
 }
 
-function newDonator(){
-
+function newDonator(data){
+console.log(data);
     var donator = {
-       firstName: "Gabriel",
-       lastName: "Vega",
-       address: address,
-       contactNumber: "+584142769178",
-       email: "gaveho@gmail.com",
-       bloodGroup: "A+",
+       firstName: data.firstName,
+       lastName: data.lastName,
+       address: donatorAddress,
+       contactNumber: data.contactNumber,
+       email: data.email,
+       bloodGroup: data.bloodGroup,
        loc:
          {
            lng: Number(longitude),
            lat: Number(latitude)
          }
        }
+       if(data.donator_id) donator.donator_id = data.donator_id;
+       document.getElementById("donator-form").style.display = "none";
+       localStorage.user = JSON.stringify(donator);
     socket.emit('donator',donator);
+}
+
+function deleteDonator(){
+    socket.emit('donator delete',localStorage.url);
+    document.getElementById("edit-donator-form").style.display = "none";
+    document.getElementById("delete-donator-form").style.display = "none";
+    delete localStorage.user;
+    delete localStorage.url;
 }
 
 function makeid(lon)
@@ -91,5 +104,23 @@ function nuevoDonator(){
 socket.on('donator',function(data) {
     console.log("on.donator");
     localStorage.donatormaps = data.url;
-    console.log(data.url);
+    console.log(data);
+    localStorage.url = data.url;
+    var html = "<div>Your url to edit is <a href='"+location.origin+"#" +
+        data.url + "'>"+location.origin+"/#"+data.url+"</a></div>";
+    html += "<div>Address: " + data.address + "</div>";
+    html += "<div>IP: " + data.ip + "</div>";
+    html += "<div>Location: (" + data.loc.lng +", " + data.loc.lat +") (lng,lat)</div>";
+    html +="<button onclick='document.getElementById(\"response-donator-form\").style.display = \"none\"'>Close</button>";
+    document.getElementById("response-donator-form").innerHTML = html;
+    document.getElementById("edit-donator-form").href += data.url;
+    document.getElementById("response-donator-form").style.display = "";
+    document.getElementById("edit-donator-form").style.display = "";
+    document.getElementById("delete-donator-form").style.display = "";
 });
+
+if(localStorage.url)
+    if(localStorage.url.length == 24){
+        document.getElementById("edit-donator-form").style.display = "";
+        document.getElementById("delete-donator-form").style.display = "";
+    }

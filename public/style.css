@@ -147,3 +147,41 @@ ul {
   right: 0;
   width: 100%;
 }
+
+.donator-form {
+
+    position: absolute;
+    z-index: 999;
+    background-color: cadetblue;
+    left: 40%;
+    top: 10%;
+    border: solid;
+    padding: 20px;
+    text-align: center;
+    line-height: 30px;
+    width: 420px;
+}
+
+.edit-donator-form {
+
+    position: absolute;
+    z-index: 999;
+    right: 10px;
+    top: 20px;
+    padding: 5px;
+    text-align: center;
+    line-height: 30px;
+    background: white;
+    border: 1px solid black;
+    border-radius: 5px;
+
+}
+
+#response-donator-form {
+    width: 510px;
+
+}
+
+#delete-donator-form {
+    top: 70px;
+}
