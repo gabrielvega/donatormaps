@@ -31,6 +31,7 @@ var clicked = 1;
 
 function showSignupForm(){
     console.log("Bienvenido al formulario de registro");
+    document.getElementById("donator-form").style.display = "";
 }
 
 function newDonator(data){
