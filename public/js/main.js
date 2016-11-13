@@ -12,8 +12,8 @@ if (navigator.geolocation) {
 
 
 function showPosition(position) {
-    latitude = position.coords.latitude + Math.random();;
-    longitude = position.coords.longitude + Math.random();;
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
     socket.emit('login',{longitude: longitude, latitude: latitude, id: localStorage.donatormaps});
 }
 
@@ -94,7 +94,7 @@ function nuevoDonator(){
        loc:
          {
            lng: Number(Math.random() * 10),
-           lat: Number(Math.random() * -40)
+           lat: Number(Math.random() * -66)
          }
        }
     socket.emit('donator',donator);

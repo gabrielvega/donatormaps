@@ -154,7 +154,6 @@ var map;
 
         locator.on("location-to-address-complete", function(evt) {
                   if (evt.address.address) {
-                  console.log(evt.address.address);
                   donatorAddress = evt.address.address.Match_addr;
                   }
                 });
@@ -214,8 +213,6 @@ var map;
                                 });
 
                                 socket.on('update',function(data) {
-                                    console.log("Info actualizada " + donators.length);
-                                    console.log(data);
                                     donators.push(data);
                                     addDonators();
                                 });

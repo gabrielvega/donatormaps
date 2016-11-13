@@ -77,8 +77,8 @@ describe('donator', function() {
 		this.stub(Donator, 'findOne').yields(null, repostObject);
 		var m = new Donator({ email: 'otheremail@gmail.com' });
 
-		m.checkForDuplicateEmails(function(hasReposts) {
-			expect(hasReposts).to.be.true;
+		m.checkForDuplicateEmails(function(emailExists) {
+			expect(emailExists).to.be.true;
 			done();
 		});
 	}));
