@@ -69,30 +69,46 @@ io.on('connection', function (socket) {
 
   socket.on('donator', function (data) {
 //TODO If donatorId != "" then have to update
-    var newDonator = new Donator({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        address: data.address,
-        contactNumber: data.contactNumber,
-        email: data.email,
-        bloodGroup: data.bloodGroup,
-        ip: socket.handshake.address,
-        loc: data.loc,
-        created: String(new Date())
-    });
+    console.log(data);
+    var donatorId = data.donator_id;
 
-    newDonator.save(function (err,donator) {
-        if (err){
-        console.log(err);
-        throw (err);
-        }
-        console.log("Donator " + data.firstName + " " + data.lastName + " saved successfully");
-        console.log(donator);
-        data.longitude = data.loc.lng;
-        data.latitude = data.loc.lat;
-        socket.emit('donator',{url: donator._id, ip:donator.ip, address: data.address,loc: donator.loc});
-        socket.broadcast.emit('update',data);
-      });//newDonator
+    if(donatorId){
+        delete data.donator_id;
+        data.ip = socket.handshake.address;
+        Donator.update({ _id: donatorId }, { $set: data}, function (err, tank) {
+            if (err) return handleError(err);
+            data.longitude = data.loc.lng;
+             data.latitude = data.loc.lat;
+             socket.emit('donator',{url: donatorId, ip:data.ip, address: data.address,loc: data.loc});
+             socket.broadcast.emit('update',data);
+        });
+
+    } else {
+    var newDonator = new Donator({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            address: data.address,
+            contactNumber: data.contactNumber,
+            email: data.email,
+            bloodGroup: data.bloodGroup,
+            ip: socket.handshake.address,
+            loc: data.loc,
+            created: String(new Date())
+        });
+
+     newDonator.save(function (err,donator) {
+         if (err){
+         console.log(err);
+         throw (err);
+         }
+         console.log("Donator " + data.firstName + " " + data.lastName + " saved successfully");
+         console.log(donator);
+         data.longitude = data.loc.lng;
+         data.latitude = data.loc.lat;
+         socket.emit('donator',{url: donator._id, ip:donator.ip, address: data.address,loc: donator.loc});
+         socket.broadcast.emit('update',data);
+       });//newDonator
+    }
 
   });
 

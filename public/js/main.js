@@ -50,6 +50,7 @@ console.log(data);
            lat: Number(latitude)
          }
        }
+       if(data.donator_id) donator.donator_id = data.donator_id;
        document.getElementById("donator-form").style.display = "none";
        localStorage.user = JSON.stringify(donator);
     socket.emit('donator',donator);
@@ -102,7 +103,7 @@ socket.on('donator',function(data) {
     html += "<div>Address: " + data.address + "</div>";
     html += "<div>IP: " + data.ip + "</div>";
     html += "<div>Location: (" + data.loc.lng +", " + data.loc.lat +") (lng,lat)</div>";
-    html +="<button onclick='document.getElementById(\"response-donator-form\").style.display = \"\"'>Close</button>";
+    html +="<button onclick='document.getElementById(\"response-donator-form\").style.display = \"none\"'>Close</button>";
     document.getElementById("response-donator-form").innerHTML = html;
     document.getElementById("edit-donator-form").href += data.url;
     document.getElementById("response-donator-form").style.display = "";
