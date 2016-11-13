@@ -69,7 +69,7 @@ var DonatorForm = React.createClass({
             <div>
             <h3>Donator Form Registration</h3>
             <form id="donatorForm" method="POST" onSubmit={this.handleSubmit}>
-            <input id="donator_id" type="text" value={this.props.donatorId} readOnly /><br />
+            <input id="donator_id" type="hidden" value={this.props.donatorId} readOnly /><br />
             <input id="firstName" type="text" placeholder="Firstname" defaultValue={this.props.props.firstName} onChange={this.setFirstName} required /><br />
             <input id="lastName" type="text" placeholder="Lastname" defaultValue={this.props.props.lastName} onChange={this.setLastName} required /><br />
             <input id="contactNumber" type="tel" placeholder="Contact number" defaultValue={this.props.props.contactNumber} pattern="([\+]\d{2} \d{3} \d{4} \d{3})|(00\d{2} \d{3} \d{4} \d{3})" title="Phone Number (Format: +xx xxx xxxx xxx or 00xx xxx xxxx xxx" required onChange={this.setContactNumber}  required /><br />
