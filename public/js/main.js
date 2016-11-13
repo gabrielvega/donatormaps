@@ -51,6 +51,43 @@ function newDonator(){
     socket.emit('donator',donator);
 }
 
+function makeid(lon)
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < lon; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+function makeblood()
+{
+    var text = "";
+    var possible = ["A","B","O","AB"];
+    text = possible[Math.floor(Math.random() * possible.length)];
+
+    return text;
+}
+
+function nuevoDonator(){
+
+    var donator = {
+       firstName: makeid(10),
+       lastName: makeid(8),
+       address: makeid(4)+ ", " + makeid(6) ,
+       contactNumber: Math.floor(Math.random() * 99999999),
+       email: makeid(7)+"@"+makeid(5)+".com",
+       bloodGroup: makeblood(),
+       loc:
+         {
+           lng: Number(Math.random() * 10),
+           lat: Number(Math.random() * -40)
+         }
+       }
+    socket.emit('donator',donator);
+}
+
 socket.on('donator',function(data) {
     console.log("on.donator");
     localStorage.donatormaps = data.url;
