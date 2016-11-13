@@ -13,10 +13,17 @@
   "dependencies": {
     "express": "4.13.4",
     "mongoose": "^4.4.20",
-    "socket.io": "^1.5.1"
+    "socket.io": "^1.5.1",
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "sinon": "^1.17.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gabrielvega/donatormaps.git"
   },
   "scripts": {
     "start": "node index.js",
-    "test": ""
+    "test": "mocha"
   }
 }
