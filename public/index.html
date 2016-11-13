@@ -25,7 +25,7 @@
 <body class="claro">
 
 <div id="donator-form" class="donator-form" style="display: none"></div>
-<a id="edit-donator-form" href="#" class="edit-donator-form" style="display: none " onclick="window.location.href = this.href; document.location.reload()">Edit my profile</a>
+<a id="edit-donator-form" href="#" class="edit-donator-form" style="display: none " onclick="window.location.href = location.origin + '/#' + localStorage.url; document.location.reload()">Edit my profile</a>
 <a id="delete-donator-form" href="#" class="edit-donator-form" style="display: none" onclick="deleteDonator()">Delete my info from Donator Maps :(</a>
 
 <div id="response-donator-form" class="donator-form" style="display: none"></div>
