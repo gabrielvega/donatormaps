@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var sinon = require('sinon');
 
-var Donator = require('../models/donator');
+var Donator = require('../Code/models/donator');
 
 describe('donator', function() {
 	it('should be invalid if first name is empty', function(done) {

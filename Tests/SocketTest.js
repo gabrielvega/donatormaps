@@ -6,7 +6,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io-client');
 var ioOptions = { transports: ['websocket'], forceNew: true, reconnection: false }
 var assert = require('assert');
-var Donator = require('../models/donator');
+var Donator = require('../Code/models/donator');
 var donator = new Donator({
             firstName: "Gabriel",
             lastName: "Vega",

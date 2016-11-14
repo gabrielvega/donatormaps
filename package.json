@@ -6,7 +6,7 @@
     "npm": "3.8.6"
   },
   "description": "A Crossover test for FSA position using MEAN stack, REACT, socket.io, ArcGIS and MongoDB",
-  "main": "index.js",
+  "main": "Code/index.js",
   "author": "Gabriel Vega Hoffmann",
   "private": true,
   "license": "",
@@ -24,7 +24,7 @@
     "url": "https://github.com/gabrielvega/donatormaps.git"
   },
   "scripts": {
-    "start": "node index.js",
-    "test": "mocha"
+    "start": "node Code/index.js",
+    "test": "mocha Tests"
   }
 }
