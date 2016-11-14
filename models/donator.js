@@ -18,12 +18,20 @@ var donatorSchema = new Schema({
                         created: String
                     });
 
-donatorSchema.methods.checkForDuplicateEmails = function(cb) {
-	this.model('Donator').findOne({
-		email: this.email
-	}, function(err, val) {
-		cb(!!val);
-	});
-};
+    donatorSchema.methods.checkForDuplicateEmails = function(cb) {
+        this.model('Donator').findOne({
+            email: this.email
+        }, function(err, val) {
+            cb(!!val);
+        });
+    };
 
-module.exports = mongoose.model('Donator', donatorSchema);
+    donatorSchema.methods.checkForDonators = function(cb) {
+        this.model('Donator').findOne({
+            email: this.email,
+        }, function(err, val) {
+            cb(!!val);
+        });
+    };
+
+    module.exports = mongoose.model('Donator', donatorSchema);

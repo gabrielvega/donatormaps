@@ -83,4 +83,27 @@ describe('donator', function() {
 		});
 	}));
 
+	it('should check for donators with same email', sinon.test(function() {
+        this.stub(Donator, 'findOne');
+        var expectedEmail = 'This name should be used in the check';
+        var m = new Donator({ email: expectedEmail });
+
+        m.checkForDonators(function() { });
+
+        sinon.assert.calledWith(Donator.findOne, {
+            email: expectedEmail
+        });
+    }));
+
+    it('should call back with true when donator exists', sinon.test(function(done) {
+        var repostObject = { email: 'gaveho@gmail.com' };
+        this.stub(Donator, 'findOne').yields(null, repostObject);
+        var m = new Donator({ email: 'some name' });
+
+        m.checkForDonators(function(hasDonator) {
+            expect(hasDonator).to.be.true;
+            done();
+        });
+    }));
+
 });
