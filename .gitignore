@@ -39,3 +39,6 @@ jspm_packages
 #IntelliJ Files
 .idea/
 donatormaps.iml
+
+MAC Files
+.DS_Store

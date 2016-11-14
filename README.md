@@ -10,7 +10,14 @@ Clone this repo
 $ git clone https://github.com/gabrielvega/donatormaps
 $ cd donatormaps
 $ npm install
-$ npm start (for testing run: npm test)
+$ npm start
+```
+
+For testing
+```
+$ npm start
+(In other terminal)
+$ npm test
 ```
 
 And point your browser to `http://localhost:3000`. Optionally, specify
